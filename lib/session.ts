@@ -15,6 +15,7 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
+
   jwt: {
     encode: ({ secret, token }) => {
       const encodedToken = jsonwebtoken.sign(
@@ -62,8 +63,11 @@ export const authOptions: NextAuthOptions = {
       try {
         const userExists = (await getUser(user?.email as string)) as { user?: UserProfile };
 
+        console.log({ userExists });
+
         if (!userExists.user) {
-          await createUser(user.name as string, user.email as string, user.image as string);
+          const data = await createUser(user.name as string, user.email as string, user.image as string);
+          console.log(data);
         }
 
         return true;
@@ -77,6 +81,5 @@ export const authOptions: NextAuthOptions = {
 
 export async function getCurrentUser() {
   const session = (await getServerSession(authOptions)) as SessionInterface;
-
   return session;
 }
