@@ -20,7 +20,6 @@ const AuthProviders = () => {
   useEffect(() => {
     const fetchProviders = async () => {
       const res = await getProviders();
-      console.log(res);
       setProviders(res);
     };
 
@@ -31,9 +30,11 @@ const AuthProviders = () => {
     return (
       <div>
         {Object.values(providers).map((provider, i) => (
-          <button key={i} onClick={() => signIn(provider.id)}>
-            {provider.id}
-          </button>
+          <div className="flex f">
+            <button key={i} onClick={() => signIn(provider.id)}>
+              {provider.id}
+            </button>
+          </div>
         ))}
       </div>
     );
