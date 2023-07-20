@@ -1,5 +1,7 @@
 import Modal from "@/components/Modal";
 import ProjectForm from "@/components/ProjectForm";
+import { getCurrentUser } from "@/lib/session";
+import { redirect } from "next/navigation";
 import { useRef } from "react";
 
 export const metadata = {
@@ -7,11 +9,14 @@ export const metadata = {
   description: "Showcase and discover remarkable developer projects",
 };
 
-const CreateProject = () => {
+const CreateProject = async () => {
+  const session = await getCurrentUser();
+
+  if (!session?.user) redirect("/");
   return (
     <Modal>
       <h3 className="modal-head-text">Create a new Project</h3>
-      <ProjectForm />
+      <ProjectForm type="create" session={session} />
     </Modal>
   );
 };
