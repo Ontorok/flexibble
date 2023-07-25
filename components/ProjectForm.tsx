@@ -7,6 +7,8 @@ import FormField from "./FormField";
 import { categoryFilters } from "@/constant";
 import CustomMenu from "./CustomMenu";
 import Button from "./Button";
+import { createNewProject, fetchToken } from "@/lib/actions";
+import { useRouter } from "next/navigation";
 
 type Props = {
   type: "create" | "update";
@@ -23,20 +25,38 @@ type initialState = {
 };
 
 const ProjectForm = ({ session, type }: Props) => {
+  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [form, setform] = useState<initialState>({
     image: "",
-    title: "",
-    description: "",
-    liveSiteUrl: "",
-    githubUrl: "",
-    category: "",
+    title: "Flexibble",
+    description: "Flexibble Description",
+    liveSiteUrl: "https://mysite.com",
+    githubUrl: "https://mysite.com",
+    category: "Frontend",
   });
 
-  const handleFormSubmit = (e: FormEvent) => {
+  const handleFormSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    alert(JSON.stringify(form, null, 2));
+    setIsSubmitting(true);
+
+    const { token } = await fetchToken();
+    console.log(token);
+
+    try {
+      if (type === "create") {
+        // Create Project
+        await createNewProject(form, session?.user?.id, token);
+        router.push("/");
+      } else {
+        // Update Project
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {

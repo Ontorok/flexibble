@@ -19,6 +19,7 @@ const FormField = ({ type, title, state, placeholder, isTextarea, setState }: Pr
         <textarea
           placeholder={placeholder}
           value={state}
+          required
           className="form_field-input"
           onChange={(e) => setState(e.target.value)}
         />
@@ -27,6 +28,7 @@ const FormField = ({ type, title, state, placeholder, isTextarea, setState }: Pr
           type={type || "text"}
           placeholder={placeholder}
           value={state}
+          required
           className="form_field-input"
           onChange={(e) => setState(e.target.value)}
         />
