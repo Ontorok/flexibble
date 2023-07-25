@@ -2,32 +2,65 @@
 
 import { SessionInterface } from "@/common.types";
 import Image from "next/image";
-import React, { ChangeEvent, FormEvent } from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 import FormField from "./FormField";
+import { categoryFilters } from "@/constant";
+import CustomMenu from "./CustomMenu";
+import Button from "./Button";
 
 type Props = {
   type: "create" | "update";
   session: SessionInterface;
 };
 
+type initialState = {
+  image: string;
+  title: string;
+  description: string;
+  liveSiteUrl: string;
+  githubUrl: string;
+  category: string;
+};
+
 const ProjectForm = ({ session, type }: Props) => {
-  const form = {
-    image: null,
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [form, setform] = useState<initialState>({
+    image: "",
     title: "",
     description: "",
     liveSiteUrl: "",
     githubUrl: "",
-  };
+    category: "",
+  });
 
   const handleFormSubmit = (e: FormEvent) => {
     e.preventDefault();
+
+    alert(JSON.stringify(form, null, 2));
   };
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.includes("image")) return alert("Please upload an image file");
+
+    const reader = new FileReader();
+
+    reader.readAsDataURL(file);
+
+    reader.onload = () => {
+      const result = reader.result as string;
+      handleStateChange("image", result);
+    };
   };
 
-  const handleStateChange = (fieldName: keyof typeof form, value: string) => {};
+  const handleStateChange = (fieldName: keyof typeof form, value: string) => {
+    setform((form) => ({
+      ...form,
+      [fieldName]: value,
+    }));
+  };
 
   return (
     <form className="flexStart form" onSubmit={handleFormSubmit}>
@@ -70,16 +103,21 @@ const ProjectForm = ({ session, type }: Props) => {
         placeholder="https://githubname.github.com"
         setState={(value) => handleStateChange("githubUrl", value)}
       />
-      <FormField
-        title="Title"
-        state={form.title}
-        placeholder="Flexibble"
-        setState={(value) => handleStateChange("title", value)}
+
+      <CustomMenu
+        title="Category"
+        state={form.category}
+        filters={categoryFilters}
+        setState={(value) => handleStateChange("category", value)}
       />
 
-      {/* Custom Category */}
       <div className="flexStart w-full">
-        <button>Create</button>
+        <Button
+          title={isSubmitting ? (type === "create" ? "Creating" : "Updating") : type === "create" ? "Create" : "Update"}
+          type="submit"
+          leftIcon="/plus.svg"
+          isSubmitting={isSubmitting}
+        />
       </div>
     </form>
   );
