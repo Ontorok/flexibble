@@ -5,23 +5,19 @@ cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
-  secure: true,
 });
+
 export async function POST(request: Request) {
-  const path = await request.json();
-  console.log(path);
+  const { path } = await request.json();
+
   if (!path) {
-    return NextResponse.json(
-      {
-        message: "Image path is requied",
-      },
-      { status: 400 }
-    );
+    return NextResponse.json({ message: "Image path is required" }, { status: 400 });
   }
+
   try {
-    const options: UploadApiOptions = {
+    const options = {
       use_filename: true,
-      unique_filename: true,
+      unique_filename: false,
       overwrite: true,
       transformation: [{ width: 1000, height: 752, crop: "scale" }],
     };
@@ -30,12 +26,6 @@ export async function POST(request: Request) {
 
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
-    if (error instanceof Error) console.log(error.message);
-    return NextResponse.json(
-      {
-        message: "Cant upload this file",
-      },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: "Failed to upload image on Cloudinary" }, { status: 500 });
   }
 }

@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "pnpm clean:ports && next dev -p 4001",
+    "dev": "pnpm clean:ports && next dev -p 4444",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "clean:ports": "pnpx kill-port 4000 4001",
-    "grafbase:run": "pnpx grafbase@0.24 dev -p 4040"
+    "clean:ports": "pnpx kill-port 4444 4445",
+    "grafbase:run": "pnpx grafbase@0.24 dev -p 4445"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.15",
