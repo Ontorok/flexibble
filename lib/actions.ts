@@ -107,8 +107,6 @@ export const createNewProject = async (form: ProjectForm, creatorId: string, tok
       },
     };
 
-    console.log(variables);
-
     return makeGraphQLRequest(createProjectMutation, variables);
   }
 };

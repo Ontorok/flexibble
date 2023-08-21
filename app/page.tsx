@@ -2,6 +2,15 @@ import { ProjectInterface } from "@/common.types";
 import ProjectCard from "@/components/ProjectCard";
 import { fetchAllProjects } from "@/lib/actions";
 
+type SearchParams = {
+  category?: string | null;
+  endcursor?: string | null;
+};
+
+type Props = {
+  searchParams: SearchParams;
+};
+
 type ProjectSearch = {
   projectSearch: {
     edges: { node: ProjectInterface }[];
@@ -14,9 +23,13 @@ type ProjectSearch = {
   };
 };
 
-const Home = async () => {
-  const data = (await fetchAllProjects()) as ProjectSearch;
-  const projectToDisplay = data?.projectSearch.edges || [];
+export const dynamic = "force-dynamic";
+export const dynamicParams = true;
+export const revalidate = 0;
+
+const Home = async ({ searchParams: { category, endcursor } }: Props) => {
+  const data = (await fetchAllProjects(category, endcursor)) as ProjectSearch;
+  const projectToDisplay = data?.projectSearch?.edges || [];
 
   if (projectToDisplay.length === 0) {
     return (
@@ -33,6 +46,7 @@ const Home = async () => {
         {projectToDisplay.map(({ node }) => (
           <ProjectCard key={node.id} project={node} />
         ))}
+        Projects
       </section>
       <h1>LoadMore</h1>
     </section>
