@@ -1,5 +1,6 @@
 import { ProjectInterface } from "@/common.types";
 import Categories from "@/components/Categories";
+import LoadMore from "@/components/LoadMore";
 import ProjectCard from "@/components/ProjectCard";
 import { fetchAllProjects } from "@/lib/actions";
 
@@ -40,6 +41,8 @@ const Home = async ({ searchParams: { category, endcursor } }: Props) => {
       </section>
     );
   }
+
+  const pagination = data?.projectSearch?.pageInfo;
   return (
     <section className="flexStart flex-col paddings mb-16">
       <Categories />
@@ -48,7 +51,12 @@ const Home = async ({ searchParams: { category, endcursor } }: Props) => {
           <ProjectCard key={node.id} project={node} />
         ))}
       </section>
-      <h1>LoadMore</h1>
+      <LoadMore
+        startCursor={pagination?.startCursor}
+        endCursor={pagination?.endCursor}
+        hasNextPage={pagination?.hasNextPage}
+        hasPreviousPage={pagination.hasNextPage}
+      />
     </section>
   );
 };

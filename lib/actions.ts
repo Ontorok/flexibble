@@ -75,10 +75,10 @@ export const getUser = (email: string) => {
 //#endregion
 
 //#region Project
-export const fetchAllProjects = (category?: string | null, endcursor?: string | null) => {
+export const fetchAllProjects = (category?: string | null, endcursor?: string | null, startcursor?: string | null) => {
   client.setHeader("x-api-key", apiKey);
 
-  return makeGraphQLRequest(projectsQuery, { category, endcursor });
+  return makeGraphQLRequest(projectsQuery, { category, endcursor, startcursor });
 };
 
 export const getProjectDetails = (id: string) => {
