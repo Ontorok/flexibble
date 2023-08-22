@@ -1,4 +1,5 @@
 import { ProjectInterface } from "@/common.types";
+import Categories from "@/components/Categories";
 import ProjectCard from "@/components/ProjectCard";
 import { fetchAllProjects } from "@/lib/actions";
 
@@ -34,14 +35,14 @@ const Home = async ({ searchParams: { category, endcursor } }: Props) => {
   if (projectToDisplay.length === 0) {
     return (
       <section className="flexStart flex-col paddings">
-        Categories
+        <Categories />
         <p className="no-result-text text-center">No Project Found, Please add one</p>
       </section>
     );
   }
   return (
     <section className="flexStart flex-col paddings mb-16">
-      <h1>Categories</h1>
+      <Categories />
       <section className="projects-grid">
         {projectToDisplay.map(({ node }) => (
           <ProjectCard key={node.id} project={node} />
