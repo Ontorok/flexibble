@@ -46,7 +46,6 @@ const Home = async ({ searchParams: { category, endcursor } }: Props) => {
         {projectToDisplay.map(({ node }) => (
           <ProjectCard key={node.id} project={node} />
         ))}
-        Projects
       </section>
       <h1>LoadMore</h1>
     </section>

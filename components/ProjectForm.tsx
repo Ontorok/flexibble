@@ -1,18 +1,19 @@
 "use client";
 
-import { SessionInterface } from "@/common.types";
+import { ProjectInterface, SessionInterface } from "@/common.types";
 import Image from "next/image";
 import React, { ChangeEvent, FormEvent, useState } from "react";
 import FormField from "./FormField";
 import { categoryFilters } from "@/constant";
 import CustomMenu from "./CustomMenu";
 import Button from "./Button";
-import { createNewProject, fetchToken } from "@/lib/actions";
+import { createNewProject, fetchToken, updateProject } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 
 type Props = {
   type: "create" | "update";
   session: SessionInterface;
+  project?: ProjectInterface;
 };
 
 type initialState = {
@@ -24,16 +25,16 @@ type initialState = {
   category: string;
 };
 
-const ProjectForm = ({ session, type }: Props) => {
+const ProjectForm = ({ session, type, project }: Props) => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [form, setform] = useState<initialState>({
-    image: "",
-    title: "Flexibble",
-    description: "Flexibble Description",
-    liveSiteUrl: "https://mysite.com",
-    githubUrl: "https://mysite.com",
-    category: "Frontend",
+    image: project?.image || "",
+    title: project?.title || "",
+    description: project?.description || "",
+    liveSiteUrl: project?.liveSiteUrl || "",
+    githubUrl: project?.githubUrl || "",
+    category: project?.category || "",
   });
 
   const handleFormSubmit = async (e: FormEvent) => {
@@ -42,7 +43,6 @@ const ProjectForm = ({ session, type }: Props) => {
     setIsSubmitting(true);
 
     const { token } = await fetchToken();
-    console.log(token);
 
     try {
       if (type === "create") {
@@ -51,9 +51,13 @@ const ProjectForm = ({ session, type }: Props) => {
         router.push("/");
       } else {
         // Update Project
+        await updateProject(form, project?.id as string, token);
+
+        router.push("/");
       }
     } catch (error) {
       console.log(error);
+      alert(`Failed to ${type} a project. Try again!`);
     } finally {
       setIsSubmitting(false);
     }

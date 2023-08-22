@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { deleteProject, fetchToken } from "@/lib/actions";
+import { sleep } from "@/utils/common-utils";
 
 type Props = {
   projectId: string;
@@ -22,7 +23,7 @@ const ProjectActions = ({ projectId }: Props) => {
 
     try {
       await deleteProject(projectId, token);
-
+      await sleep(3000);
       router.push("/");
     } catch (error) {
       console.error(error);
