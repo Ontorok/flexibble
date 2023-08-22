@@ -30,9 +30,9 @@ const ProjectCard = ({
       </Link>
 
       <div className="flexBetween w-full px-2 mt-3 font-semibold text-sm">
-        <Link href={`/profile/${createdBy.id}`}>
+        <Link href={`/profile/${createdBy?.id}`}>
           <div className="flexCenter gap-2">
-            <Image src={createdBy.avatarUrl} alt={createdBy.name} width={24} height={24} className="rounded-full" />
+            <Image src={createdBy?.avatarUrl} alt={createdBy?.name} width={24} height={24} className="rounded-full" />
           </div>
         </Link>
 

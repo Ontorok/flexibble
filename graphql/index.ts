@@ -134,6 +134,10 @@ export const getProjectsOfUserQuery = `
             id
             title
             image
+            createdBy {
+              avatarUrl
+              name
+            }
           }
         }
       }
